@@ -79,7 +79,7 @@ public class KdTree {
             else{
                 if(x.right == null){
                     size += 1;
-                    x.right = new Node(p)
+                    x.right = new Node(p);
                 }
                 else{
                     insert(x.right, p, !vertical);
@@ -90,6 +90,20 @@ public class KdTree {
 
     // does the set contain the point p?
     public boolean contains(Point2D p) {
+        Node x = root;
+        boolean vertical = false;
+        while (x != null){
+            if(p.equals(x.p)){
+                return true;
+            }
+            else if(x.tree_check(p, vertical)){
+                x = x.left;
+            }
+            else{
+                x = x.right;
+            }
+            vertical = !vertical;
+        }
         return false;
     }
 
