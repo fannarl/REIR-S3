@@ -56,7 +56,37 @@ public class KdTree {
 
     // add the point p to the set (if it is not already in the set)
     public void insert(Point2D p) {
+        if(isEmpty()){
+            size += 1;
+            root = new Node(p);
+        }
+        else{
+            insert(root, p, false);
+        }
     };
+
+    private void insert(Node x, Point2D p, boolean vertical){
+        if(!p.equals(x.p)){
+            if(x.tree_check(p, vertical)){
+                if(x.left == null){
+                    size += 1;
+                    x.left = new Node(p);
+                }
+                else{
+                    insert(x.left, p, !vertical);
+                }
+            }
+            else{
+                if(x.right == null){
+                    size += 1;
+                    x.right = new Node(p)
+                }
+                else{
+                    insert(x.right, p, !vertical);
+                }
+            }
+        }
+    }
 
     // does the set contain the point p?
     public boolean contains(Point2D p) {
