@@ -109,9 +109,30 @@ public class KdTree {
 
     // draw all of the points to standard draw
     public void draw() {
-
+        draw(root, new RectHV(0, 0, 1, 1), false);
     }
 
+    private void draw(Node n, RectHV rect, boolean Vertical) {
+        if (n != null) {
+            if (Vertical) {
+                draw(n.left, new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), n.p.y()), !Vertical);
+                draw(n.right, new RectHV(rect.xmin(), n.p.y(), rect.xmax(), rect.ymax()), !Vertical);
+                StdDraw.setPenRadius();
+                StdDraw.setPenColor(StdDraw.BLUE);
+                StdDraw.line(rect.xmin(), n.p.y(), rect.xmax(), n.p.y());
+            } else {
+                draw(n.left, new RectHV(rect.xmin(), rect.ymin(), n.p.x(), rect.ymax()), !Vertical);
+                draw(n.right, new RectHV(n.p.x(), rect.ymin(), rect.xmax(), rect.ymax()), !Vertical);
+                StdDraw.setPenRadius();
+                StdDraw.setPenColor(StdDraw.RED);
+                StdDraw.line(n.p.x(), rect.ymin(), n.p.x(), rect.ymax());
+            }
+            StdDraw.setPenRadius(0.012);
+            StdDraw.setPenColor(StdDraw.BLACK);
+            StdDraw.point(n.p.x(), n.p.y());
+        }
+        return;
+    }
     // all points in the set that are inside the rectangle
     public Iterable<Point2D> range(RectHV rect) {
         return null;
