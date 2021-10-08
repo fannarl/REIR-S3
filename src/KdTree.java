@@ -2,16 +2,46 @@
 /*************************************************************************
  *************************************************************************/
 
+import java.awt.*;
 import java.util.Arrays;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Out;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.*;
 
 public class KdTree {
     // construct an empty set of points
+    private Node root;
+    private int size;
+    private Point2D nearest;
+
+    private static class Node{
+        private Point2D p;
+        private RectHV rect;
+        private Node left;
+        private Node right;
+
+        public Node(Point2D p){
+            this.left = null;
+            this.right = null;
+            this.p = p;
+        }
+
+        public boolean tree_check(Point2D p, boolean vertical){
+            if ((!vertical && p.x() < this.p.x()) || (vertical && p.y() < this.p.y())){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
     public KdTree() {
+        size = 0;
+        root = null;
     }
 
     // is the set empty?

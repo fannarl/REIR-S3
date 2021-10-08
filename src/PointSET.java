@@ -13,6 +13,7 @@
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import edu.princeton.cs.algs4.*;
 
@@ -78,6 +79,35 @@ public class PointSET {
     }
 
     public static void main(String[] args) {
-    }
+        In in = new In();
+        Out out = new Out();
+        PointSET brute = new PointSET();
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 10000; i++){
+            brute.insert(new Point2D(in.readDouble(),in.readDouble()));
+        }
+        long stopTime = System.nanoTime();
+        long elapsed_time = (stopTime - startTime);
+        elapsed_time = TimeUnit.MILLISECONDS.convert(elapsed_time, TimeUnit.NANOSECONDS);
+        out.print(elapsed_time);
 
+        /*
+        StdOut.println(brute.nearest(new Point2D(0.04,0.02)));
+        StdOut.println(brute.isEmpty());
+        brute.insert(new Point2D(0.53,0.48));
+        brute.insert(new Point2D(0.88,0.99));
+        brute.insert(new Point2D(0.1,0.72));
+        brute.insert(new Point2D(0.15,0.13));
+        brute.insert(new Point2D(0.02,0.65));
+        brute.insert(new Point2D(0.70,0.94));
+        brute.insert(new Point2D(0.41,0.89));
+        brute.insert(new Point2D(0.83,0.19));
+        brute.range(new RectHV(0.5, 0.4, 0.9,0.5));
+        StdOut.println(brute.nearest(new Point2D(0.5,0.5)));
+        StdOut.println(brute.contains(new Point2D(0.88,0.99)));
+        StdOut.println(brute.contains(new Point2D(0.07,0.02)));
+        StdOut.println(brute.isEmpty());
+        brute.draw();
+        */
+    }
 }
