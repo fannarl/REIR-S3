@@ -46,12 +46,12 @@ public class KdTree {
 
     // is the set empty?
     public boolean isEmpty() {
-        return false;
+        return root == null;
     }
 
     // number of points in the set
     public int size() {
-        return 0;
+        return size;
     }
 
     // add the point p to the set (if it is not already in the set)
