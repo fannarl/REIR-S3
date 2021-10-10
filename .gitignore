@@ -2,3 +2,7 @@
 /shelf/
 /workspace.xml
 .idea
+
+*.DS_Store
+*.class
+*.jar
