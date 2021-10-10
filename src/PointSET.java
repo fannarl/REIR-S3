@@ -11,11 +11,13 @@
  *
  *************************************************************************/
 
-import java.awt.*;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
+import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.SET;
 
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.Stopwatch;
 
 public class PointSET {
     // construct an empty set of points
@@ -79,17 +81,16 @@ public class PointSET {
     }
 
     public static void main(String[] args) {
-        In in = new In();
-        Out out = new Out();
         PointSET brute = new PointSET();
-        long startTime = System.nanoTime();
-        for (int i = 0; i < 10000; i++){
-            brute.insert(new Point2D(in.readDouble(),in.readDouble()));
+        Stopwatch w = new Stopwatch();
+
+        int n = 1000; //StdIn.readInt();
+
+        for (int i = 0; i < n; i++){
+            brute.insert(new Point2D(StdIn.readDouble(), StdIn.readDouble()));
         }
-        long stopTime = System.nanoTime();
-        long elapsed_time = (stopTime - startTime);
-        elapsed_time = TimeUnit.MILLISECONDS.convert(elapsed_time, TimeUnit.NANOSECONDS);
-        out.print(elapsed_time);
+
+        StdOut.println(w.elapsedTime() + "s");
 
         /*
         StdOut.println(brute.nearest(new Point2D(0.04,0.02)));
@@ -109,5 +110,6 @@ public class PointSET {
         StdOut.println(brute.isEmpty());
         brute.draw();
         */
+        
     }
 }
