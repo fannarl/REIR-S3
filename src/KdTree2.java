@@ -235,9 +235,9 @@ class KdTree {
         double nodeDist = node.distanceTo(point);
 
         if (nearestDist > (nodeDist * nodeDist)) {
-            if (cmp >= 0)
+            if (cmp > 0)
                 nearestSearch(point, node.right);
-            if (cmp <= 0)
+            else
                 nearestSearch(point, node.left);
         }
 
