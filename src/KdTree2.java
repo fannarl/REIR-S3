@@ -1,5 +1,4 @@
 
-
 import java.util.Arrays;
 
 import edu.princeton.cs.algs4.Point2D;
@@ -28,9 +27,11 @@ class KdTree {
         private int size;              // subtree count
 
         public Node(Point2D point, boolean color, int size) {
-            this.point = point;
-            this.color = color;
-            this.size = size;
+            this.point  = point;
+            this.color  = color;
+            this.size   = size;
+            this.left   = null;
+            this.right  = null;
         }
 
         public int compareTo(Point2D point) {
@@ -40,13 +41,18 @@ class KdTree {
 
         public int compareTo(RectHV rect) {
             if (color) {
-                if (rect.ymax() < point.y()) return -1;
-                if (rect.ymin() > point.y()) return 1;
+                if (rect.ymax() < point.y()) return 1;
+                if (rect.ymin() > point.y()) return -1;
             } else {
-                if (rect.xmax() < point.x()) return -1;
-                if (rect.xmin() > point.x()) return 1;
+                if (rect.xmax() < point.x()) return 1;
+                if (rect.xmin() > point.x()) return -1;
             }
             return 0;
+        }
+
+        public double distanceTo(Point2D point) {
+            if (color) return Math.abs(this.point.y() - point.y());
+                       return Math.abs(this.point.x() - point.x());
         }
     }
 
@@ -98,6 +104,8 @@ class KdTree {
 
     // construct an empty set of points
     public KdTree() {
+        this.nearestDist = Double.MAX_VALUE;
+        this.nearest = null;
     }
 
     public int size() {
@@ -189,37 +197,51 @@ class KdTree {
         return pointsInRect;
     }
 
+    private Node nearest;
+    private double nearestDist;
+
     // a nearest neighbor in the set to point; null if set is empty
     public Point2D nearest(Point2D point) {
-        double dist = point.distanceSquaredTo(root.point);
-        return nearest(point, root, dist, root.point, dist);
+        if (root == null) return null;
+
+        this.nearest     = null;
+        this.nearestDist = Double.MAX_VALUE;
+
+        nearestSearch(point, root);
+        return nearest.point;
     }
 
-    private Point2D nearest(Point2D point, Node node, double nodeDist, Point2D nearest, double nearestDist) {
-        // StdOut.println(1);
-        if (node == null) return nearest;
-        // if (node.point.equals(point)) return node.point;
-        // StdOut.println(2);
-        if (nodeDist < nearestDist) {
-            nearestDist = nodeDist;
-            nearest = node.point;
+    private void nearestSearch(Point2D point, Node node) {
+        if (node == null) return;
+
+        int cmp = 0;
+        double nodePointDist = point.distanceSquaredTo(node.point);
+
+        if (nodePointDist < nearestDist) {
+            nearestDist = nodePointDist;
+            nearest = node;
         }
 
-        int cmp = node.compareTo(point);
+        if (node.left == null && node.right == null)
+            return;
 
-        if (cmp < 0) {
-            // StdOut.println(3);
-            nearest = nearest(point, node.right, point.distanceSquaredTo(node.right.point), nearest, nearestDist);
-        } else {
-            // StdOut.println(4);
-            nearest = nearest(point, node.left, point.distanceSquaredTo(node.left.point), nearest, nearestDist);
+        cmp = node.compareTo(point);
+
+        if (cmp <= 0)
+            nearestSearch(point, node.right);
+        if (cmp >= 0)
+            nearestSearch(point, node.left);
+        
+        double nodeDist = node.distanceTo(point);
+
+        if (nearestDist > (nodeDist * nodeDist)) {
+            if (cmp > 0)
+                nearestSearch(point, node.right);
+            else
+                nearestSearch(point, node.left);
         }
 
-
-
-        // StdOut.println(5);
-
-        return nearest;
+        return;
     }
 
 
