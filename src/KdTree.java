@@ -38,6 +38,17 @@ public class KdTree {
                 return false;
             }
         }
+
+        public int compareTo(RectHV rect) {
+            if (!tree_check(p, true)) {
+                if (rect.ymax() < p.y()) return 1;
+                if (rect.ymin() > p.y()) return -1;
+            } else {
+                if (rect.xmax() < p.x()) return 1;
+                if (rect.xmin() > p.x()) return -1;
+            }
+            return 0;
+        }
     }
 
     public KdTree() {
@@ -156,12 +167,25 @@ public class KdTree {
     private void range(Node x, RectHV rect, List<Point2D> rangeList){
         if (x == null){ return; }
 
-        if(x.rect.intersects(rect)){
-            if(rect.contains(x.p)){
-                rangeList.add(x.p);
-            }
+        if(rect.contains(x.p)){
+            rangeList.add(x.p);
+        }
+        if(rect.intersects(x.rect)){
             range(x.left, rect, rangeList);
             range(x.right, rect, rangeList);
+        }
+        else{
+            int parentRect = x.compareTo(rect);
+            if (parentRect == 1){
+                range(x.left, rect, rangeList);
+            }
+            else if (parentRect == -1){
+                range(x.right, rect, rangeList);
+            }
+            else{
+                range(x.left, rect, rangeList);
+                range(x.right, rect, rangeList);
+            }
         }
     }
 
