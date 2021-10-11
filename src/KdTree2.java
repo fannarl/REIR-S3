@@ -187,6 +187,9 @@ class KdTree {
         if (rect.contains(node.point))
             rangeSet.add(node.point);
 
+        if (node.left == null && node.right == null)
+            return;
+
         int cmp = node.compareTo(rect);
 
         if (cmp >= 0)
