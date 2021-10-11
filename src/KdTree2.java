@@ -175,26 +175,26 @@ class KdTree {
 
     // all points in the set that are inside the rectangle
     public Iterable<Point2D> range(RectHV rect) {
-        return range(root, rect);
+        SET<Point2D> rangeSet = new SET<Point2D>();
+        rangeSearch(root, rect, rangeSet);
+        return rangeSet;
     }
 
-    public SET<Point2D> range(Node node, RectHV rect) {
-        if (node == null) return new SET<Point2D>();
+    // Find the points the lie within the rectangle
+    private void rangeSearch(Node node, RectHV rect, SET<Point2D> rangeSet){
+        if (node == null) return;
 
-        SET<Point2D> pointsInRect = new SET<Point2D>();
-
-        if (rect.contains(node.point)) pointsInRect.add(node.point);
+        if (rect.contains(node.point))
+            rangeSet.add(node.point);
 
         int cmp = node.compareTo(rect);
 
-        if      (cmp > 0) pointsInRect.union(range(node.right, rect));
-        else if (cmp < 0) pointsInRect.union(range(node.left, rect));
-        else {
-            pointsInRect.union(range(node.right, rect));
-            pointsInRect.union(range(node.left, rect));
-        }
+        if (cmp >= 0)
+            rangeSearch(node.left, rect, rangeSet);
+        if (cmp <= 0)
+            rangeSearch(node.right, rect, rangeSet);
 
-        return pointsInRect;
+        return;
     }
 
     private Node nearest;
